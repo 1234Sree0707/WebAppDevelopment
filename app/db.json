@@ -1,0 +1,106 @@
+
+  "units":[
+  {
+    "id": "1",
+    "type": "length",
+    "label": "Meter",
+    "symbol": "m"
+  },
+  {
+    "id": "2",
+    "type": "length",
+    "label": "Kilometer",
+    "symbol": "km"
+  },
+  {
+    "id": "3",
+    "type": "length",
+    "label": "Centimeter",
+    "symbol": "cm"
+  },
+  {
+    "id": "4",
+    "type": "mass",
+    "label": "Gram",
+    "symbol": "g"
+  },
+  {
+    "id": "5",
+    "type": "mass",
+    "label": "Kilogram",
+    "symbol": "kg"
+  },
+  {
+    "id": "6",
+    "type": "temperature",
+    "label": "Celsius",
+    "symbol": "°C"
+  },
+  {
+    "id": "7",
+    "type": "temperature",
+    "label": "Fahrenheit",
+    "symbol": "°F"
+  }
+],
+  "conversions": [
+     {
+    "id": "1",
+    "from": "m",
+    "to": "cm",
+    "factor": 100,
+    "formula": "value * 100"
+  },
+  {
+    "id": "2",
+    "from": "cm",
+    "to": "m",
+    "factor": 0.01,
+    "formula": "value / 100"
+  },
+  {
+    "id": "3",
+    "from": "km",
+    "to": "m",
+    "factor": 1000,
+    "formula": "value * 1000"
+  },
+  {
+    "id": "4",
+    "from": "m",
+    "to": "km",
+    "factor": 0.001,
+    "formula": "value / 1000"
+  },
+  {
+    "id": "5",
+    "from": "g",
+    "to": "kg",
+    "factor": 0.001,
+    "formula": "value / 1000"
+  },
+  {
+    "id": "6",
+    "from": "kg",
+    "to": "g",
+    "factor": 1000,
+    "formula": "value * 1000"
+  },
+  {
+    "id": "7",
+    "from": "°C",
+    "to": "°F",
+    "factor": null,
+    "formula": "(value * 9/5) + 32"
+  },
+  {
+    "id": "8",
+    "from": "°F",
+    "to": "°C",
+    "factor": null,
+    "formula": "(value - 32) * 5/9"
+  }
+ 
+  ],
+  "history": []
+}
