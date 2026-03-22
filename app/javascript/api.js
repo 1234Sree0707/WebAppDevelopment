@@ -126,3 +126,35 @@ export async function saveHistory(
 
     }
 }
+
+
+export async function getHistory() {
+    try {
+
+        const res = await fetch(
+            `${BASE_URL}/history?_sort=timestamp&_order=desc`
+        );
+
+        if (!res.ok) {
+            throw new Error(
+                "Failed to load history"
+            );
+        }
+
+        return await res.json();
+
+    }
+
+    catch (err) {
+
+        console.error(
+            "History load error:",
+            err
+        );
+
+      
+
+        return [];
+
+    }
+}

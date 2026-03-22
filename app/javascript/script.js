@@ -1,10 +1,12 @@
-import {
-    performConversion
-} from "./conversion.js";
+import { performConversion }
+    from "./conversion.js";
 
 import {
-    saveHistory
+    saveHistory,
+    getHistory
 } from "./api.js";
+
+/* ---------------- INITIALISATION ---------------- */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -14,14 +16,11 @@ document.addEventListener(
 
             const state = {
 
-                type:
-                    "Length",
+                type: "Length",
 
-                action:
-                    "Conversion",
+                action: "Conversion",
 
-                operator:
-                    "+"
+                operator: "+"
 
             };
 
@@ -44,6 +43,8 @@ document.addEventListener(
             toggleOperators(
                 false
             );
+
+            /* Load history on page load */
 
             await loadHistory();
 
@@ -182,9 +183,15 @@ async function handleConversion(
 
         };
 
-        saveHistory(
+        /* Non-critical save */
+
+        await saveHistory(
             record
         );
+
+        /* Refresh history */
+
+        await loadHistory();
 
     }
 
@@ -195,6 +202,107 @@ async function handleConversion(
         );
 
     }
+
+}
+
+/* ---------------- LOAD HISTORY ---------------- */
+
+async function loadHistory() {
+
+    const history =
+        await getHistory();
+
+    displayHistory(
+        history
+    );
+
+}
+
+/* ---------------- DISPLAY HISTORY ---------------- */
+
+function displayHistory(
+    history
+) {
+
+    let historyContainer =
+        document.getElementById(
+            "historyContainer"
+        );
+
+    /* Create container if missing */
+
+    if (!historyContainer) {
+
+        historyContainer =
+            document.createElement(
+                "div"
+            );
+
+        historyContainer.id =
+            "historyContainer";
+
+        historyContainer.style.marginTop =
+            "30px";
+
+        document
+            .querySelector(
+                ".main-content"
+            )
+            .appendChild(
+                historyContainer
+            );
+
+    }
+
+    historyContainer.innerHTML =
+        "<h2>History</h2>";
+
+    /* No records */
+
+    if (!history.length) {
+
+        historyContainer.innerHTML +=
+            "<p>No history yet.</p>";
+
+        return;
+
+    }
+
+    /* Render records */
+
+    history.forEach(
+        record => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.style.padding =
+                "10px";
+
+            item.style.marginBottom =
+                "8px";
+
+            item.style.background =
+                "#ffffff";
+
+            item.style.borderRadius =
+                "8px";
+
+            item.style.boxShadow =
+                "0 2px 6px rgba(0,0,0,0.1)";
+
+            item.innerText =
+                `${record.expression} = ${record.result}`;
+
+            historyContainer.appendChild(
+                item
+            );
+
+        }
+    );
+
 }
 
 /* ---------------- PLACEHOLDER FUNCTIONS ---------------- */
@@ -202,47 +310,53 @@ async function handleConversion(
 async function loadUnits(
     type
 ) {
+
     console.log(
         "Loading units for:",
         type
     );
-}
 
-async function loadHistory() {
-    console.log(
-        "Loading history"
-    );
 }
 
 function setActiveTypeCard(
     index
 ) {
+
     console.log(
         "Active type:",
         index
     );
+
 }
 
 function setActiveActionButton(
     index
 ) {
+
     console.log(
         "Active action:",
         index
     );
+
 }
 
 function toggleOperators(
     show
 ) {
+
     console.log(
         "Toggle operators:",
         show
     );
+
 }
 
 function showErrorBanner(
     message
 ) {
-    alert(message);
+
+    alert(
+        message
+    );
+
 }
