@@ -1,4 +1,94 @@
-import { getConversion } from "./api.js";
+import { getConversion }
+    from "./api.js";
+
+
+
+function applyConversion(
+    value,
+    convObj,
+    fromUnit,
+    toUnit
+) {
+
+    /* Exception Flow:
+       Invalid number
+    */
+
+    if (
+        typeof value !== "number" ||
+        !Number.isFinite(value)
+    ) {
+
+        throw new Error(
+            "Invalid number"
+        );
+
+    }
+
+    /* Alternate Flow:
+       Same unit
+    */
+
+    if (fromUnit === toUnit) {
+
+        return parseFloat(
+            value.toFixed(6)
+        );
+
+    }
+
+    try {
+
+        /* Main Flow:
+           Factor conversion
+        */
+
+        if (
+            convObj.factor !== null
+        ) {
+
+            return parseFloat(
+                (
+                    value *
+                    convObj.factor
+                ).toFixed(6)
+            );
+
+        }
+
+        /* Formula conversion */
+
+        else {
+
+            const expr =
+                convObj.formula
+                    .replace(
+                        "value",
+                        value
+                    );
+
+            return parseFloat(
+                eval(expr)
+                    .toFixed(6)
+            );
+
+        }
+
+    }
+
+    catch (err) {
+
+        /* Exception Flow:
+           Bad formula
+        */
+
+        throw new Error(
+            "Bad formula"
+        );
+
+    }
+
+}
 
 /*
 Business Logic Layer
@@ -10,6 +100,7 @@ export async function performConversion(
     fromUnit,
     toUnit
 ) {
+
     try {
 
         const conversion =
@@ -18,39 +109,26 @@ export async function performConversion(
                 toUnit
             );
 
-        let result;
+        const result =
+            applyConversion(
+                fromValue,
+                conversion,
+                fromUnit,
+                toUnit
+            );
 
-        /* Factor-based conversion */
+        return {
 
-        if (conversion.factor !== null) {
+            result,
 
-            result =
-                fromValue *
-                conversion.factor;
+            expression:
+                `${fromValue} ${fromUnit} → ${toUnit}`
 
-        }
+        };
 
-        /* Formula-based conversion (Temperature) */
+    }
 
-        else {
-
-            const formula =
-                conversion.formula.replace(
-                    "value",
-                    fromValue
-                );
-
-            result = eval(formula);
-
-        }
-
-        /* Round result */
-
-        return Number(
-            result.toFixed(4)
-        );
-
-    } catch (err) {
+    catch (err) {
 
         console.error(
             "Conversion error:",
@@ -58,5 +136,7 @@ export async function performConversion(
         );
 
         throw err;
+
     }
+
 }
