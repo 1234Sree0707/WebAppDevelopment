@@ -1,5 +1,10 @@
-import { performConversion }
-    from "./conversion.js";
+import {
+    performConversion
+} from "./conversion.js";
+
+import {
+    saveHistory
+} from "./api.js";
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -8,19 +13,37 @@ document.addEventListener(
         try {
 
             const state = {
-                type: "Length",
-                action: "Conversion",
-                operator: "+"
+
+                type:
+                    "Length",
+
+                action:
+                    "Conversion",
+
+                operator:
+                    "+"
+
             };
 
-            attachEventListeners(state);
+            attachEventListeners(
+                state
+            );
 
-            await loadUnits(state.type);
+            await loadUnits(
+                state.type
+            );
 
-            setActiveTypeCard(0);
-            setActiveActionButton(0);
+            setActiveTypeCard(
+                0
+            );
 
-            toggleOperators(false);
+            setActiveActionButton(
+                1
+            );
+
+            toggleOperators(
+                false
+            );
 
             await loadHistory();
 
@@ -28,7 +51,9 @@ document.addEventListener(
 
         catch (err) {
 
-            if (err instanceof TypeError) {
+            if (
+                err instanceof TypeError
+            ) {
 
                 showErrorBanner(
                     "Server unavailable"
@@ -52,7 +77,9 @@ document.addEventListener(
 
 /* ---------------- EVENT LISTENERS ---------------- */
 
-function attachEventListeners(state) {
+function attachEventListeners(
+    state
+) {
 
     const fromInput =
         document.getElementById(
@@ -71,24 +98,35 @@ function attachEventListeners(state) {
 
     fromInput.addEventListener(
         "input",
-        () => handleConversion(state)
+        () =>
+            handleConversion(
+                state
+            )
     );
 
     fromSelect.addEventListener(
         "change",
-        () => handleConversion(state)
+        () =>
+            handleConversion(
+                state
+            )
     );
 
     toSelect.addEventListener(
         "change",
-        () => handleConversion(state)
+        () =>
+            handleConversion(
+                state
+            )
     );
 
 }
 
 /* ---------------- CONVERSION HANDLER ---------------- */
 
-async function handleConversion(state) {
+async function handleConversion(
+    state
+) {
 
     try {
 
@@ -107,9 +145,10 @@ async function handleConversion(state) {
                 ".converter-box:last-child select"
             ).value;
 
-        if (!fromValue) return;
+        if (!fromValue)
+            return;
 
-        const result =
+        const conversion =
             await performConversion(
                 Number(fromValue),
                 fromUnit,
@@ -118,7 +157,34 @@ async function handleConversion(state) {
 
         document.getElementById(
             "toValue"
-        ).value = result;
+        ).value =
+            conversion.result;
+
+        /* ---------------- SAVE HISTORY ---------------- */
+
+        const record = {
+
+            type:
+                state.type,
+
+            action:
+                state.action,
+
+            expression:
+                conversion.expression,
+
+            result:
+                conversion.result,
+
+            timestamp:
+                new Date()
+                    .toISOString()
+
+        };
+
+        saveHistory(
+            record
+        );
 
     }
 
@@ -129,12 +195,13 @@ async function handleConversion(state) {
         );
 
     }
-
 }
 
 /* ---------------- PLACEHOLDER FUNCTIONS ---------------- */
 
-async function loadUnits(type) {
+async function loadUnits(
+    type
+) {
     console.log(
         "Loading units for:",
         type
@@ -147,27 +214,35 @@ async function loadHistory() {
     );
 }
 
-function setActiveTypeCard(index) {
+function setActiveTypeCard(
+    index
+) {
     console.log(
         "Active type:",
         index
     );
 }
 
-function setActiveActionButton(index) {
+function setActiveActionButton(
+    index
+) {
     console.log(
         "Active action:",
         index
     );
 }
 
-function toggleOperators(show) {
+function toggleOperators(
+    show
+) {
     console.log(
         "Toggle operators:",
         show
     );
 }
 
-function showErrorBanner(message) {
+function showErrorBanner(
+    message
+) {
     alert(message);
 }

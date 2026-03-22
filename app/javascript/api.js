@@ -2,9 +2,11 @@
 API Layer
 Handles communication with json-server
 Use Case: UC-JS-04
+Use Case: UC-JS-05
 */
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL =
+    "http://localhost:3000";
 
 /*
 Fetch Conversion Record
@@ -12,19 +14,26 @@ Returns:
 { from, to, factor, formula }
 */
 
-export async function getConversion(from, to) {
+export async function getConversion(
+    from,
+    to
+) {
     try {
 
         /* Alternate Flow:
            Same unit selected
         */
 
-        if (from.toLowerCase() === to.toLowerCase()) {
+        if (
+            from.toLowerCase() ===
+            to.toLowerCase()
+        ) {
             return {
                 from: from,
                 to: to,
                 factor: 1,
-                formula: "Same unit"
+                formula:
+                    "Same unit"
             };
         }
 
@@ -40,7 +49,8 @@ export async function getConversion(from, to) {
             );
         }
 
-        const data = await res.json();
+        const data =
+            await res.json();
 
         /* Exception Flow */
 
@@ -52,7 +62,9 @@ export async function getConversion(from, to) {
 
         return data[0];
 
-    } catch (err) {
+    }
+
+    catch (err) {
 
         console.error(
             "getConversion error:",
@@ -60,5 +72,57 @@ export async function getConversion(from, to) {
         );
 
         throw err;
+
+    }
+}
+
+/*
+Save Calculation Record to History
+Use Case: UC-JS-05
+POST /history
+*/
+
+export async function saveHistory(
+    record
+) {
+    try {
+
+        const res = await fetch(
+            `${BASE_URL}/history`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(
+                        record
+                    )
+            }
+        );
+
+        if (!res.ok) {
+            throw new Error(
+                "Failed to save history"
+            );
+        }
+
+        return await res.json();
+
+    }
+
+    catch (err) {
+
+        console.error(
+            "History save error:",
+            err
+        );
+
+        /* Non-critical
+           Do NOT block user */
+
     }
 }
