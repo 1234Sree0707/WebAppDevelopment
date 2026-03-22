@@ -140,3 +140,75 @@ export async function performConversion(
     }
 
 }
+export function compareValues(
+    v1,
+    u1,
+    v2,
+    u2,
+    base1,
+    base2
+) {
+
+    /* Exception Flow:
+       Invalid numbers
+    */
+
+    if (
+        isNaN(v1) ||
+        isNaN(v2) ||
+        isNaN(base1) ||
+        isNaN(base2)
+    ) {
+
+        return
+            "Invalid values — cannot compare";
+
+    }
+
+    /* Alternate Flow:
+       Same units
+    */
+
+    if (u1 === u2) {
+
+        if (v1 > v2) {
+
+            return
+                `${v1} ${u1} is GREATER than ${v2} ${u2}`;
+
+        }
+
+        if (v1 < v2) {
+
+            return
+                `${v1} ${u1} is LESS than ${v2} ${u2}`;
+
+        }
+
+        return
+            `${v1} ${u1} is EQUAL to ${v2} ${u2}`;
+
+    }
+
+    /* Main Flow:
+       Compare base values
+    */
+
+    if (base1 > base2) {
+
+        return
+            `${v1} ${u1} is GREATER than ${v2} ${u2}`;
+
+    }
+
+    if (base1 < base2) {
+
+        return
+            `${v1} ${u1} is LESS than ${v2} ${u2}`;
+
+    }
+
+    return
+        `${v1} ${u1} is EQUAL to ${v2} ${u2}`;
+
+}
