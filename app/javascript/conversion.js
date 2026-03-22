@@ -212,3 +212,86 @@ export function compareValues(
         `${v1} ${u1} is EQUAL to ${v2} ${u2}`;
 
 }
+
+export function performArithmetic(
+    v1,
+    v2normalised,
+    op
+) {
+
+    /* Exception Flow:
+       Invalid numbers
+    */
+
+    if (
+        isNaN(v1) ||
+        isNaN(v2normalised)
+    ) {
+
+        throw new Error(
+            "Invalid values"
+        );
+
+    }
+
+    switch (op) {
+
+        case "+":
+
+            return parseFloat(
+                (
+                    v1 +
+                    v2normalised
+                ).toFixed(6)
+            );
+
+        case "-":
+
+            return parseFloat(
+                (
+                    v1 -
+                    v2normalised
+                ).toFixed(6)
+            );
+
+        case "*":
+
+            return parseFloat(
+                (
+                    v1 *
+                    v2normalised
+                ).toFixed(6)
+            );
+
+        case "/":
+
+            /* Exception Flow:
+               Divide by zero
+            */
+
+            if (
+                v2normalised === 0
+            ) {
+
+                throw new Error(
+                    "Divide by zero"
+                );
+
+            }
+
+            return parseFloat(
+                (
+                    v1 /
+                    v2normalised
+                ).toFixed(6)
+            );
+
+        default:
+
+            throw new Error(
+                "Unknown operator"
+            );
+
+    }
+
+}

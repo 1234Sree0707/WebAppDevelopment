@@ -5,6 +5,12 @@ import {
     saveHistory,
     getHistory
 } from "./api.js";
+import { performArithmetic 
+
+}from "./conversion.js";
+
+
+
 
 /* ---------------- INITIALISATION ---------------- */
 
