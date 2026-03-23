@@ -106,13 +106,35 @@ function attachEventListeners(state) {
             ".converter-box:last-child select"
         );
 
-    /* ---------------- INPUT / SELECT EVENTS ---------------- */
 
     if (fromInput) {
 
         fromInput.addEventListener(
             "input",
-            () => handleConversion(state)
+            () => {
+
+                state.fromVal =
+                    fromInput.value;
+
+                calculate(state);
+
+            }
+        );
+
+    }
+
+    if (toInput) {
+
+        toInput.addEventListener(
+            "input",
+            () => {
+
+                state.toVal =
+                    toInput.value;
+
+                calculate(state);
+
+            }
         );
 
     }
@@ -121,7 +143,14 @@ function attachEventListeners(state) {
 
         fromSelect.addEventListener(
             "change",
-            () => handleConversion(state)
+            () => {
+
+                state.fromUnit =
+                    fromSelect.value;
+
+                calculate(state);
+
+            }
         );
 
     }
@@ -130,12 +159,18 @@ function attachEventListeners(state) {
 
         toSelect.addEventListener(
             "change",
-            () => handleConversion(state)
+            () => {
+
+                state.toUnit =
+                    toSelect.value;
+
+                calculate(state);
+
+            }
         );
 
     }
 
-    /* ---------------- UC-JS-15 TYPE CARD CLICK ---------------- */
 
     const typeSelector =
         document.querySelector(
@@ -156,20 +191,14 @@ function attachEventListeners(state) {
 
                         try {
 
-                            /* Step 2 — Update state */
-
                             state.type =
                                 card.dataset.type;
-
-                            /* Step 3 — Highlight */
 
                             setActive(
                                 typeSelector,
                                 card,
                                 ".type-card"
                             );
-
-                            /* Step 4 — Reset inputs */
 
                             if (fromInput)
                                 fromInput.value = "";
@@ -182,14 +211,10 @@ function attachEventListeners(state) {
                                 ""
                             );
 
-                            /* Step 5 — Load units */
-
                             const units =
                                 await getUnits(
                                     state.type
                                 );
-
-                            /* Step 6 — Populate dropdowns */
 
                             populateDropdown(
                                 fromSelect,
@@ -201,10 +226,10 @@ function attachEventListeners(state) {
                                 units
                             );
 
-                            /* Step 8 — Reset state units */
-
                             state.fromUnit = "";
                             state.toUnit = "";
+                            state.fromVal = "";
+                            state.toVal = "";
 
                         }
 
@@ -229,18 +254,17 @@ function attachEventListeners(state) {
 
     }
 
-    /* ---------------- ACTION TABS ---------------- */
 
-    const actionBar =
+    const actionSelector =
         document.querySelector(
             ".action-bar"
         );
 
-    if (actionBar) {
+    if (actionSelector) {
 
-        actionBar
+        actionSelector
             .querySelectorAll(
-                ".tab-btn"
+                ".action-btn"
             )
             .forEach(btn => {
 
@@ -249,17 +273,22 @@ function attachEventListeners(state) {
                     () => {
 
                         state.action =
-                            btn.innerText.trim();
+                            btn.dataset.action;
 
                         setActive(
-                            actionBar,
+                            actionSelector,
                             btn,
-                            ".tab-btn"
+                            ".action-btn"
                         );
 
                         toggleOperators(
                             state.action ===
                             "Arithmetic"
+                        );
+
+                        showResult(
+                            0,
+                            ""
                         );
 
                     }
@@ -269,89 +298,74 @@ function attachEventListeners(state) {
             });
 
     }
-    const actionSelector =
-    document.querySelector(
-        ".action-bar"
-    );
 
-if (actionSelector) {
+    /* ---------------- OPERATOR BUTTONS (Arithmetic) ---------------- */
 
-    actionSelector
-        .querySelectorAll(
-            ".action-btn"
-        )
-        .forEach(btn => {
+    const operatorSelector =
+        document.querySelector(
+            "#operator-selector"
+        );
 
-            btn.addEventListener(
-                "click",
-                () => {
+    if (operatorSelector) {
 
-                    state.action =
-                        btn.dataset.action;
+        operatorSelector
+            .querySelectorAll(
+                ".op-btn"
+            )
+            .forEach(btn => {
 
-                    setActive(
-                        actionSelector,
-                        btn,
-                        ".action-btn"
-                    );
+                btn.addEventListener(
+                    "click",
+                    () => {
 
-                    toggleOperators(
-                        state.action ===
-                        "Arithmetic"
-                    );
+                        state.operator =
+                            btn.textContent;
 
-                    showResult(
-                        0,
-                        ""
-                    );
+                        setActive(
+                            operatorSelector,
+                            btn,
+                            ".op-btn"
+                        );
 
-                }
+                        calculate(state);
 
-            );
+                    }
 
-        });
+                );
 
-}
+            });
+
+    }
 
 }
 
 /* ---------------- CONVERSION HANDLER ---------------- */
 
-async function handleConversion(
-    state
-) {
+function handleConversion(state) {
 
-    try {
+    state.fromVal =
+        document.getElementById(
+            "fromValue"
+        ).value;
 
-        const fromValue =
-            document.getElementById(
-                "fromValue"
-            ).value;
+    state.toVal =
+        document.getElementById(
+            "toValue"
+        ).value;
 
-        const fromUnit =
-            document.querySelector(
-                ".converter-box:first-child select"
-            ).value;
+    state.fromUnit =
+        document.querySelector(
+            ".converter-box:first-child select"
+        ).value;
 
-        const toUnit =
-            document.querySelector(
-                ".converter-box:last-child select"
-            ).value;
+    state.toUnit =
+        document.querySelector(
+            ".converter-box:last-child select"
+        ).value;
 
-        if (!fromValue)
-            return;
+    calculate(state);
 
-        const conversion =
-            await performConversion(
-                Number(fromValue),
-                fromUnit,
-                toUnit
-            );
-
-        showResult(
-    conversion.result,
-    toUnit
-);
+}
 
         /* ---------------- SAVE HISTORY ---------------- */
 
