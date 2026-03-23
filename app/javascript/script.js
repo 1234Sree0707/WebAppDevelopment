@@ -84,9 +84,7 @@ document.addEventListener(
 
 /* ---------------- EVENT LISTENERS ---------------- */
 
-function attachEventListeners(
-    state
-) {
+function attachEventListeners(state) {
 
     const fromInput =
         document.getElementById(
@@ -105,27 +103,95 @@ function attachEventListeners(
 
     fromInput.addEventListener(
         "input",
-        () =>
-            handleConversion(
-                state
-            )
+        () => handleConversion(state)
     );
 
     fromSelect.addEventListener(
         "change",
-        () =>
-            handleConversion(
-                state
-            )
+        () => handleConversion(state)
     );
 
     toSelect.addEventListener(
         "change",
-        () =>
-            handleConversion(
-                state
-            )
+        () => handleConversion(state)
     );
+
+    /* ---------------- TYPE CARDS ---------------- */
+
+    const cardGrid =
+        document.querySelector(
+            ".card-grid"
+        );
+
+    if (cardGrid) {
+
+        cardGrid
+            .querySelectorAll(".card")
+            .forEach(card => {
+
+                card.addEventListener(
+                    "click",
+                    () => {
+
+                        state.type =
+                            card.innerText.trim();
+
+                        setActive(
+                            cardGrid,
+                            card,
+                            ".card"
+                        );
+
+                        loadUnits(
+                            state.type
+                        );
+
+                    }
+
+                );
+
+            });
+
+    }
+
+    /* ---------------- ACTION TABS ---------------- */
+
+    const actionBar =
+        document.querySelector(
+            ".action-bar"
+        );
+
+    if (actionBar) {
+
+        actionBar
+            .querySelectorAll(".tab-btn")
+            .forEach(btn => {
+
+                btn.addEventListener(
+                    "click",
+                    () => {
+
+                        state.action =
+                            btn.innerText.trim();
+
+                        setActive(
+                            actionBar,
+                            btn,
+                            ".tab-btn"
+                        );
+
+                        toggleOperators(
+                            state.action ===
+                            "Arithmetic"
+                        );
+
+                    }
+
+                );
+
+            });
+
+    }
 
 }
 
@@ -313,14 +379,125 @@ function displayHistory(
 
 /* ---------------- PLACEHOLDER FUNCTIONS ---------------- */
 
+import { getUnits }
+    from "./api.js";
+
 async function loadUnits(
     type
 ) {
 
-    console.log(
-        "Loading units for:",
-        type
+    try {
+
+        const units =
+            await getUnits(type);
+
+        const fromSelect =
+            document.querySelector(
+                ".converter-box:first-child select"
+            );
+
+        const toSelect =
+            document.querySelector(
+                ".converter-box:last-child select"
+            );
+
+        populateDropdown(
+            fromSelect,
+            units
+        );
+
+        populateDropdown(
+            toSelect,
+            units
+        );
+
+    }
+
+    catch (err) {
+
+        console.error(
+            "Failed to load units:",
+            err
+        );
+
+    }
+
+}
+
+
+function populateDropdown(
+    selectEl,
+    units
+) {
+
+ 
+
+    if (!selectEl) {
+
+        console.warn(
+            "populateDropdown: select element not found"
+        );
+
+        return;
+
+    }
+
+   
+
+    selectEl.innerHTML = "";
+
+ 
+
+    const defaultOption =
+        document.createElement(
+            "option"
+        );
+
+    defaultOption.value = "";
+
+    defaultOption.textContent =
+        "-- Select Unit --";
+
+    defaultOption.disabled =
+        true;
+
+    defaultOption.selected =
+        true;
+
+    selectEl.appendChild(
+        defaultOption
     );
+
+ 
+
+    if (
+        !units ||
+        units.length === 0
+    ) {
+
+        return;
+
+    }
+
+ 
+
+    units.forEach(u => {
+
+        const opt =
+            document.createElement(
+                "option"
+            );
+
+        opt.value =
+            u.symbol;
+
+        opt.textContent =
+            `${u.label} (${u.symbol})`;
+
+        selectEl.appendChild(
+            opt );
+
+    });
 
 }
 
@@ -354,6 +531,42 @@ function toggleOperators(
         "Toggle operators:",
         show
     );
+
+}
+
+
+function setActive(
+    parentEl,
+    clickedEl,
+    childSelector
+) {
+
+    /* Exception Flow:
+       parent element missing
+    */
+
+    if (!parentEl) {
+        return;
+    }
+
+    /* Remove active from all siblings */
+
+    parentEl
+        .querySelectorAll(
+            childSelector
+        )
+        .forEach(el => {
+            el.classList.remove(
+                "active"
+            );
+        });
+
+    /* Add active to clicked */
+
+    clickedEl
+        .classList.add(
+            "active"
+        );
 
 }
 
