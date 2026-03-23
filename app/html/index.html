@@ -7,64 +7,180 @@
   <link rel="stylesheet" href="../css/styles.css"/>
 </head>
 <body>
+
   <header class="topbar">
-    <h1 class="title">Quantity Measurement Tool</h1>
+    <h1 class="title">
+      Quantity Measurement Tool
+    </h1>
   </header>
 
   <main class="main-content">
+
+    <!-- ---------------- TYPE CARDS ---------------- -->
+
     <section class="card-section">
-      <h2 class="section-title">Select Measurement Type</h2>
+
+      <h2 class="section-title">
+        Select Measurement Type
+      </h2>
+
       <div class="card-grid">
+
         <div class="card">
           <img src="https://img.icons8.com/color/64/ruler.png" alt="Length"/>
           <p>Length</p>
         </div>
+
         <div class="card">
           <img src="https://img.icons8.com/color/64/scales.png" alt="Weight"/>
           <p>Weight</p>
         </div>
+
         <div class="card">
           <img src="https://img.icons8.com/color/64/thermometer.png" alt="Temperature"/>
           <p>Temperature</p>
         </div>
+
         <div class="card">
           <img src="https://img.icons8.com/color/64/measuring-cup.png" alt="Volume"/>
           <p>Volume</p>
         </div>
+
       </div>
+
     </section>
+
+    <!-- ---------------- ACTION TABS ---------------- -->
 
     <section class="card-section">
-      <h2 class="section-title">Choose Action</h2>
+
+      <h2 class="section-title">
+        Choose Action
+      </h2>
+
       <div class="action-bar">
-        <button class="tab-btn">Comparison</button>
-        <button class="tab-btn">Conversion</button>
-        <button class="tab-btn">Arithmetic</button>
+
+        <button class="tab-btn">
+          Comparison
+        </button>
+
+        <button class="tab-btn">
+          Conversion
+        </button>
+
+        <button class="tab-btn">
+          Arithmetic
+        </button>
+
       </div>
+
     </section>
+
+    <!-- ---------------- OPERATOR ROW (UC-JS-13) ---------------- -->
+
+    <section
+        id="operator-selector"
+        class="operator-bar"
+        style="display: none;">
+
+      <button class="op-btn">+</button>
+      <button class="op-btn">-</button>
+      <button class="op-btn">*</button>
+      <button class="op-btn">/</button>
+
+    </section>
+
+    <!-- ---------------- CONVERTER ---------------- -->
 
     <section class="converter">
+
       <div class="converter-box">
-        <label for="fromValue">From</label>
-        <input type="number" id="fromValue" value="64"/>
+
+        <label for="fromValue">
+          From
+        </label>
+
+        <input
+            type="number"
+            id="fromValue"
+            value="64"/>
+
         <select>
-          <option value="km">Kilometer</option>
-          <option value="m" >Meter</option>
-          <option value="cm">Centimeter</option>
+
+          <option value="km">
+            Kilometer
+          </option>
+
+          <option value="m">
+            Meter
+          </option>
+
+          <option value="cm">
+            Centimeter
+          </option>
+
         </select>
+
       </div>
 
       <div class="converter-box">
-        <label for="toValue">To</label>
-        <input type="number" id="toValue" value="64000"/>
+
+        <label for="toValue">
+          To
+        </label>
+
+        <input
+            type="number"
+            id="toValue"
+            value="64000"/>
+
         <select>
-          <option value="m">Meter</option>
-          <option value="km">Kilometer</option>
-          <option value="cm">Centimeter</option>
+
+          <option value="m">
+            Meter
+          </option>
+
+          <option value="km">
+            Kilometer
+          </option>
+
+          <option value="cm">
+            Centimeter
+          </option>
+
         </select>
+
       </div>
+
     </section>
+
+    <!-- ---------------- RESULT PANEL (UC-JS-12) ---------------- -->
+
+    <section class="result-panel">
+
+      <h2 class="section-title">
+        Result
+      </h2>
+
+      <div class="result-display">
+
+        <span id="result-value">
+          —
+        </span>
+
+        <span id="result-unit">
+        </span>
+
+      </div>
+
+    </section>
+
   </main>
-  <script type="module" src="../javascript/script.js"></script>
+
+  <script
+      type="module"
+      src="../javascript/script.js">
+  </script>
+
 </body>
 </html>
