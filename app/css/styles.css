@@ -4,6 +4,7 @@ body {
   margin: 0;
 }
 
+
 .topbar {
   background: linear-gradient(90deg, #ff6a00, #ee0979);
   padding: 20px;
@@ -16,6 +17,8 @@ body {
   font-weight: bold;
 }
 
+/* Layout */
+
 .main-content {
   padding: 20px;
 }
@@ -26,6 +29,8 @@ body {
   color: #222;
   font-weight: 600;
 }
+
+/* ---------------- CARDS ---------------- */
 
 .card-grid {
   display: flex;
@@ -43,6 +48,8 @@ body {
   text-align: center;
   color: white;
   font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
@@ -54,10 +61,17 @@ body {
 
 .card:hover {
   transform: scale(1.05);
-  background: linear-gradient(135deg, #ff6a00, #ee0979);
 }
 
-/* Action bar */
+/* ACTIVE CARD */
+
+.card.active {
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
+  transform: scale(1.05);
+}
+
+/* ---------------- ACTION BAR ---------------- */
+
 .action-bar {
   display: flex;
   gap: 16px;
@@ -72,7 +86,6 @@ body {
   background: linear-gradient(135deg, #43cea2, #185a9d);
   color: white;
   font-size: 16px;
-  font-weight: 500;
   cursor: pointer;
   transition: transform 0.2s;
 }
@@ -81,7 +94,35 @@ body {
   transform: translateY(-3px);
 }
 
-/* Converter section */
+/* ACTIVE TAB */
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
+}
+
+/* ---------------- OPERATOR ROW ---------------- */
+
+.operator-bar {
+  display: none;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.op-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #185a9d;
+  color: white;
+  cursor: pointer;
+}
+
+.op-btn.active {
+  background: #ff6a00;
+}
+
+/* ---------------- CONVERTER ---------------- */
+
 .converter {
   display: flex;
   gap: 20px;
@@ -99,9 +140,6 @@ body {
 
 .converter-box label {
   font-weight: bold;
-  color: #333;
-    width: 100%;
-
 }
 
 .converter-box input,
@@ -114,6 +152,37 @@ body {
   font-size: 16px;
 }
 
+/* ---------------- RESULT PANEL ---------------- */
+
+.result-panel {
+  margin-top: 30px;
+}
+
+.result-display {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+/* Highlight animation */
+
+.highlight {
+  animation: highlightFade 1.5s ease;
+}
+
+@keyframes highlightFade {
+
+  0% {
+    background: #fff3cd;
+  }
+
+  100% {
+    background: transparent;
+  }
+
+}
+
+/* ---------------- HISTORY PANEL ---------------- */
+
 .history-panel {
   margin-top: 30px;
 }
@@ -122,6 +191,8 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
+  max-height: 260px;
+  overflow-y: auto;
 }
 
 #history-list li {
@@ -131,4 +202,8 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   font-size: 15px;
+}
+
+#history-list li:hover {
+  background: #f1f5ff;
 }
