@@ -158,3 +158,42 @@ export async function getHistory() {
 
     }
 }
+/*
+Fetch Units by Type
+GET /units?type=length
+*/
+
+export async function getUnits(
+    type
+) {
+
+    try {
+
+        const res = await fetch(
+            `${BASE_URL}/units?type=${type}`
+        );
+
+        if (!res.ok) {
+
+            throw new Error(
+                "Failed to fetch units"
+            );
+
+        }
+
+        return await res.json();
+
+    }
+
+    catch (err) {
+
+        console.error(
+            "getUnits error:",
+            err
+        );
+
+        return [];
+
+    }
+
+}
