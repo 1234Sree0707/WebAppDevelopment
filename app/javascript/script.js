@@ -228,10 +228,10 @@ async function handleConversion(
                 toUnit
             );
 
-        document.getElementById(
-            "toValue"
-        ).value =
-            conversion.result;
+        showResult(
+    conversion.result,
+    toUnit
+);
 
         /* ---------------- SAVE HISTORY ---------------- */
 
@@ -576,6 +576,67 @@ function showErrorBanner(
 
     alert(
         message
+    );
+
+}
+
+
+function showResult(
+    value,
+    unitSymbol
+) {
+
+    const valueEl =
+        document.querySelector(
+            "#result-value"
+        );
+
+    const unitEl =
+        document.querySelector(
+            "#result-unit"
+        );
+
+
+    if (!valueEl || !unitEl) {
+        console.warn(
+            "Result elements not found"
+        );
+        return;
+    }
+
+
+    if (value === null ||
+        value === undefined) {
+
+        valueEl.textContent = "—";
+        unitEl.textContent = "";
+
+        return;
+    }
+
+
+    valueEl.textContent =
+        value;
+
+    unitEl.textContent =
+        unitSymbol || "";
+
+
+    valueEl
+        .classList
+        .add("highlight");
+
+    setTimeout(
+        () => {
+
+            valueEl
+                .classList
+                .remove(
+                    "highlight"
+                );
+
+        },
+        1500
     );
 
 }
