@@ -91,6 +91,11 @@ function attachEventListeners(state) {
             "fromValue"
         );
 
+    const toInput =
+        document.getElementById(
+            "toValue"
+        );
+
     const fromSelect =
         document.querySelector(
             ".converter-box:first-child select"
@@ -101,50 +106,120 @@ function attachEventListeners(state) {
             ".converter-box:last-child select"
         );
 
-    fromInput.addEventListener(
-        "input",
-        () => handleConversion(state)
-    );
+    /* ---------------- INPUT / SELECT EVENTS ---------------- */
 
-    fromSelect.addEventListener(
-        "change",
-        () => handleConversion(state)
-    );
+    if (fromInput) {
 
-    toSelect.addEventListener(
-        "change",
-        () => handleConversion(state)
-    );
+        fromInput.addEventListener(
+            "input",
+            () => handleConversion(state)
+        );
 
-    /* ---------------- TYPE CARDS ---------------- */
+    }
 
-    const cardGrid =
+    if (fromSelect) {
+
+        fromSelect.addEventListener(
+            "change",
+            () => handleConversion(state)
+        );
+
+    }
+
+    if (toSelect) {
+
+        toSelect.addEventListener(
+            "change",
+            () => handleConversion(state)
+        );
+
+    }
+
+    /* ---------------- UC-JS-15 TYPE CARD CLICK ---------------- */
+
+    const typeSelector =
         document.querySelector(
             ".card-grid"
         );
 
-    if (cardGrid) {
+    if (typeSelector) {
 
-        cardGrid
-            .querySelectorAll(".card")
+        typeSelector
+            .querySelectorAll(
+                ".type-card"
+            )
             .forEach(card => {
 
                 card.addEventListener(
                     "click",
-                    () => {
+                    async () => {
 
-                        state.type =
-                            card.innerText.trim();
+                        try {
 
-                        setActive(
-                            cardGrid,
-                            card,
-                            ".card"
-                        );
+                            /* Step 2 — Update state */
 
-                        loadUnits(
-                            state.type
-                        );
+                            state.type =
+                                card.dataset.type;
+
+                            /* Step 3 — Highlight */
+
+                            setActive(
+                                typeSelector,
+                                card,
+                                ".type-card"
+                            );
+
+                            /* Step 4 — Reset inputs */
+
+                            if (fromInput)
+                                fromInput.value = "";
+
+                            if (toInput)
+                                toInput.value = "";
+
+                            showResult(
+                                0,
+                                ""
+                            );
+
+                            /* Step 5 — Load units */
+
+                            const units =
+                                await getUnits(
+                                    state.type
+                                );
+
+                            /* Step 6 — Populate dropdowns */
+
+                            populateDropdown(
+                                fromSelect,
+                                units
+                            );
+
+                            populateDropdown(
+                                toSelect,
+                                units
+                            );
+
+                            /* Step 8 — Reset state units */
+
+                            state.fromUnit = "";
+                            state.toUnit = "";
+
+                        }
+
+                        catch (err) {
+
+                            console.error(
+                                "Failed to load units:",
+                                err
+                            );
+
+                            showErrorBanner(
+                                "Failed to load units"
+                            );
+
+                        }
 
                     }
 
@@ -164,7 +239,9 @@ function attachEventListeners(state) {
     if (actionBar) {
 
         actionBar
-            .querySelectorAll(".tab-btn")
+            .querySelectorAll(
+                ".tab-btn"
+            )
             .forEach(btn => {
 
                 btn.addEventListener(
@@ -192,6 +269,49 @@ function attachEventListeners(state) {
             });
 
     }
+    const actionSelector =
+    document.querySelector(
+        ".action-bar"
+    );
+
+if (actionSelector) {
+
+    actionSelector
+        .querySelectorAll(
+            ".action-btn"
+        )
+        .forEach(btn => {
+
+            btn.addEventListener(
+                "click",
+                () => {
+
+                    state.action =
+                        btn.dataset.action;
+
+                    setActive(
+                        actionSelector,
+                        btn,
+                        ".action-btn"
+                    );
+
+                    toggleOperators(
+                        state.action ===
+                        "Arithmetic"
+                    );
+
+                    showResult(
+                        0,
+                        ""
+                    );
+
+                }
+
+            );
+
+        });
+
+}
 
 }
 
@@ -281,12 +401,27 @@ async function handleConversion(
 
 async function loadHistory() {
 
-    const history =
-        await getHistory();
+    try {
 
-    displayHistory(
-        history
-    );
+        const records =
+            await getHistory();
+
+        renderHistory(
+            records
+        );
+
+    }
+
+    catch (err) {
+
+        console.error(
+            "Failed to load history:",
+            err
+        );
+
+        renderHistory([]);
+
+    }
 
 }
 
@@ -527,10 +662,31 @@ function toggleOperators(
     show
 ) {
 
-    console.log(
-        "Toggle operators:",
+    const operatorRow =
+        document.querySelector(
+            "#operator-selector"
+        );
+
+    /* Exception Flow:
+       element missing
+    */
+
+    if (!operatorRow) {
+
+        console.warn(
+            "Operator selector not found"
+        );
+
+        return;
+
+    }
+
+    /* Main Flow */
+
+    operatorRow.style.display =
         show
-    );
+            ? "flex"
+            : "none";
 
 }
 
@@ -567,6 +723,59 @@ function setActive(
         .classList.add(
             "active"
         );
+
+}
+function renderHistory(records) {
+
+   
+
+    if (!records) {
+        records = [];
+    }
+
+    const list =
+        document.querySelector(
+            "#history-list"
+        );
+
+    if (!list) {
+        console.warn(
+            "History list element not found"
+        );
+        return;
+    }
+
+   
+
+    list.innerHTML = "";
+
+
+    if (!records.length) {
+
+        list.innerHTML =
+            "<li>No history yet.</li>";
+
+        return;
+
+    }
+
+   
+
+    records.forEach(r => {
+
+        const li =
+            document.createElement(
+                "li"
+            );
+
+        li.textContent =
+            `${r.expression}  =  ${r.result}  (${new Date(
+                r.timestamp
+            ).toLocaleString()})`;
+
+        list.appendChild(li);
+
+    });
 
 }
 

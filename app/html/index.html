@@ -6,181 +6,173 @@
   <title>Quantity Measurement</title>
   <link rel="stylesheet" href="../css/styles.css"/>
 </head>
+
 <body>
 
-  <header class="topbar">
-    <h1 class="title">
-      Quantity Measurement Tool
-    </h1>
-  </header>
+<header class="topbar">
+  <h1 class="title">
+    Quantity Measurement Tool
+  </h1>
+</header>
 
-  <main class="main-content">
+<main class="main-content">
 
-    <!-- ---------------- TYPE CARDS ---------------- -->
+<!-- ---------------- TYPE CARDS ---------------- -->
 
-    <section class="card-section">
+<section class="card-section">
 
-      <h2 class="section-title">
-        Select Measurement Type
-      </h2>
+  <h2 class="section-title">
+    Select Measurement Type
+  </h2>
 
-      <div class="card-grid">
+  <div class="card-grid">
 
-        <div class="card">
-          <img src="https://img.icons8.com/color/64/ruler.png" alt="Length"/>
-          <p>Length</p>
-        </div>
+    <div class="card type-card" data-type="length">
+      <img src="https://img.icons8.com/color/64/ruler.png" alt="Length"/>
+      <p>Length</p>
+    </div>
 
-        <div class="card">
-          <img src="https://img.icons8.com/color/64/scales.png" alt="Weight"/>
-          <p>Weight</p>
-        </div>
+    <div class="card type-card" data-type="mass">
+      <img src="https://img.icons8.com/color/64/scales.png" alt="Weight"/>
+      <p>Weight</p>
+    </div>
 
-        <div class="card">
-          <img src="https://img.icons8.com/color/64/thermometer.png" alt="Temperature"/>
-          <p>Temperature</p>
-        </div>
+    <div class="card type-card" data-type="temperature">
+      <img src="https://img.icons8.com/color/64/thermometer.png" alt="Temperature"/>
+      <p>Temperature</p>
+    </div>
 
-        <div class="card">
-          <img src="https://img.icons8.com/color/64/measuring-cup.png" alt="Volume"/>
-          <p>Volume</p>
-        </div>
+    <div class="card type-card" data-type="volume">
+      <img src="https://img.icons8.com/color/64/measuring-cup.png" alt="Volume"/>
+      <p>Volume</p>
+    </div>
 
-      </div>
+  </div>
 
-    </section>
+</section>
 
-    <!-- ---------------- ACTION TABS ---------------- -->
+<!-- ---------------- ACTION TABS ---------------- -->
 
-    <section class="card-section">
+<section class="card-section">
 
-      <h2 class="section-title">
-        Choose Action
-      </h2>
+  <h2 class="section-title">
+    Choose Action
+  </h2>
 
-      <div class="action-bar">
+  <div class="action-bar">
 
-        <button class="tab-btn">
-          Comparison
-        </button>
+  <button
+      class="tab-btn action-btn"
+      data-action="Comparison">
+      Comparison
+  </button>
 
-        <button class="tab-btn">
-          Conversion
-        </button>
+  <button
+      class="tab-btn action-btn active"
+      data-action="Conversion">
+      Conversion
+  </button>
 
-        <button class="tab-btn">
-          Arithmetic
-        </button>
+  <button
+      class="tab-btn action-btn"
+      data-action="Arithmetic">
+      Arithmetic
+  </button>
 
-      </div>
+</div>
 
-    </section>
+</section>
 
-    <!-- ---------------- OPERATOR ROW (UC-JS-13) ---------------- -->
+<!-- ---------------- OPERATOR ROW ---------------- -->
 
-    <section
-        id="operator-selector"
-        class="operator-bar"
-        style="display: none;">
+<section id="operator-selector" class="operator-bar">
 
-      <button class="op-btn">+</button>
-      <button class="op-btn">-</button>
-      <button class="op-btn">*</button>
-      <button class="op-btn">/</button>
+  <button class="op-btn">+</button>
+  <button class="op-btn">-</button>
+  <button class="op-btn">*</button>
+  <button class="op-btn">/</button>
 
-    </section>
+</section>
 
-    <!-- ---------------- CONVERTER ---------------- -->
+<!-- ---------------- CONVERTER ---------------- -->
 
-    <section class="converter">
+<section class="converter">
 
-      <div class="converter-box">
+  <div class="converter-box">
 
-        <label for="fromValue">
-          From
-        </label>
+    <label for="fromValue">
+      From
+    </label>
 
-        <input
-            type="number"
-            id="fromValue"
-            value="64"/>
+    <input
+        type="number"
+        id="fromValue"
+        placeholder="Enter value"
+    />
 
-        <select>
+    <select></select>
 
-          <option value="km">
-            Kilometer
-          </option>
+  </div>
 
-          <option value="m">
-            Meter
-          </option>
+  <div class="converter-box">
 
-          <option value="cm">
-            Centimeter
-          </option>
+    <label for="toValue">
+      To
+    </label>
 
-        </select>
+    <input
+        type="number"
+        id="toValue"
+        readonly
+    />
 
-      </div>
+    <select></select>
 
-      <div class="converter-box">
+  </div>
 
-        <label for="toValue">
-          To
-        </label>
+</section>
 
-        <input
-            type="number"
-            id="toValue"
-            value="64000"/>
+<!-- ---------------- RESULT PANEL ---------------- -->
 
-        <select>
+<section class="result-panel">
 
-          <option value="m">
-            Meter
-          </option>
+  <h2 class="section-title">
+    Result
+  </h2>
 
-          <option value="km">
-            Kilometer
-          </option>
+  <div class="result-display">
 
-          <option value="cm">
-            Centimeter
-          </option>
+    <span id="result-value">
+      —
+    </span>
 
-        </select>
+    <span id="result-unit"></span>
 
-      </div>
+  </div>
 
-    </section>
+</section>
 
-    <!-- ---------------- RESULT PANEL (UC-JS-12) ---------------- -->
+<!-- ---------------- HISTORY PANEL ---------------- -->
 
-    <section class="result-panel">
+<section class="history-panel">
 
-      <h2 class="section-title">
-        Result
-      </h2>
+  <h2 class="section-title">
+    History
+  </h2>
 
-      <div class="result-display">
+  <ul id="history-list">
 
-        <span id="result-value">
-          —
-        </span>
+    <li>
+      No history yet.
+    </li>
 
-        <span id="result-unit">
-        </span>
+  </ul>
 
-      </div>
+</section>
 
-    </section>
+</main>
 
-  </main>
-
-  <script
-      type="module"
-      src="../javascript/script.js">
-  </script>
+<script type="module" src="../javascript/script.js"></script>
 
 </body>
 </html>
